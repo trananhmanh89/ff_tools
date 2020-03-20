@@ -1,4 +1,5 @@
 # FF Tools for Joomla
+Tools for joomla, remove mootools, www redirect, minify js, minify css
 
 ![2020-03-21_005620](https://user-images.githubusercontent.com/20571336/77192215-ccecb300-6b0e-11ea-82a6-9b00188ab76c.png)
 
