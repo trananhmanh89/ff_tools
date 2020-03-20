@@ -22,7 +22,7 @@
                     name="ssl"
                     type="list"
                     label="SSL redirect"
-                    description="Choose type of ssl redirect"
+                    description="Choose type of ssl redirect. Force SSL at Joomla configuration will override this config."
                     default="">
                     <option value="">do nothing</option>
                     <option value="https">to https</option>
