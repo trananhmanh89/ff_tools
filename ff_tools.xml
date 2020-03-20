@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.1" type="plugin" group="system" method="upgrade">
+    <name>FF Tools</name>
+    <author>Mr Meo</author>
+    <creationDate>December 2019</creationDate>
+    <copyright>https://github.com/trananhmanh89/</copyright>
+    <license>GPL v2</license>
+    <authorUrl>https://github.com/trananhmanh89/</authorUrl>
+    <version>1.0.0</version>
+    <description>FF Tools</description>
+    <files>
+        <filename plugin="ff_tools">ff_tools.php</filename>
+    </files>
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+                <field type="spacer" name="remove-mootool-spacer" label="&lt;h3&gt;Mootools Removal&lt;/h3&gt;" />
+                <field
+                    name="remove"
+                    type="list"
+                    label="Remove Mootools on"
+                    description="Choose where to remove mootools"
+                    default="">
+                    <option value="">do nothing</option>
+                    <option value="site">on Site</option>
+                    <option value="admin">on Admin</option>
+                    <option value="both">Site and Admin</option>
+                </field>
+                <field type="spacer" name="redirection-spacer" label="&lt;h3&gt;Redirection&lt;/h3&gt;" />
+                <field
+                    name="ssl"
+                    type="list"
+                    label="SSL redirect"
+                    description="Choose type of ssl redirect"
+                    default="">
+                    <option value="">do nothing</option>
+                    <option value="https">to https</option>
+                    <option value="http">to http</option>
+                </field>
+                <field
+                    name="www"
+                    type="list"
+                    label="WWW redirect"
+                    description="Choose type of wwww redirect"
+                    default="">
+                    <option value="">do nothing</option>
+                    <option value="none-www">to none-www</option>
+                    <option value="www">to www</option>
+                </field>
+                <field type="spacer" name="Minify-spacer" label="&lt;h3&gt;Minify&lt;/h3&gt;" />
+                <field
+                    name="minify-js"
+                    type="list"
+                    label="Minify JS"
+                    default="">
+                    <option value="">No</option>
+                    <option value="1">Yes</option>
+                </field>
+                <field 
+                    name="js-exclude" 
+                    type="textarea" 
+                    default="" 
+                    label="Exclude Js Files" 
+                    description="File name or relative path of js files you want to exclude from minify. Separate by linebreak" 
+                    rows="5" 
+                    cols="5" 
+                    filter="raw"/>
+                <field
+                    name="minify-css"
+                    type="list"
+                    label="Minify Css"
+                    default="">
+                    <option value="">No</option>
+                    <option value="1">Yes</option>
+                </field>
+                <field 
+                    name="css-exclude" 
+                    type="textarea" 
+                    default="" 
+                    label="Exclude Css Files" 
+                    description="File name or relative path of css files you want to exclude from minify. Separate by linebreak" 
+                    rows="5" 
+                    cols="5" 
+                    filter="raw"/>
+            </fieldset>
+        </fields>
+    </config>
+</extension>
