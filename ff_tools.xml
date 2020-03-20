@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="3.1" type="plugin" group="system" method="upgrade">
-    <name>FF Tools</name>
+    <name>System - FF Tools</name>
     <author>Mr Meo</author>
     <creationDate>December 2019</creationDate>
     <copyright>https://github.com/trananhmanh89/</copyright>
@@ -10,23 +10,26 @@
     <description>FF Tools</description>
     <files>
         <filename plugin="ff_tools">ff_tools.php</filename>
+        <filename>helper.php</filename>
+        <folder>override</folder>
+        <folder>vendor</folder>
     </files>
     <config>
         <fields name="params">
             <fieldset name="basic">
                 <field type="spacer" name="remove-mootool-spacer" label="&lt;h3&gt;Mootools Removal&lt;/h3&gt;" />
                 <field
-                    name="remove"
+                    name="remove-mootools"
                     type="list"
                     label="Remove Mootools on"
                     description="Choose where to remove mootools"
                     default="">
-                    <option value="">do nothing</option>
+                    <option value="">no where</option>
                     <option value="site">on Site</option>
                     <option value="admin">on Admin</option>
                     <option value="both">Site and Admin</option>
                 </field>
-                <field type="spacer" name="redirection-spacer" label="&lt;h3&gt;Redirection&lt;/h3&gt;" />
+                <field type="spacer" name="redirection-spacer" label="&lt;h3&gt;Redirection (only Front End)&lt;/h3&gt;" />
                 <field
                     name="ssl"
                     type="list"

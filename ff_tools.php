@@ -3,29 +3,30 @@
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\CMSPlugin;
 
+Jloader::register('FFToolsHelper', __DIR__ . '/helper.php');
+
 defined('_JEXEC') or die('Restricted access');
 
 class PlgSystemFf_tools extends CMSPlugin
 {
-    public function onAfterRender()
+    public function onAfterInitialise()
     {
-        $remove = $this->params->get('remove');
-        $app = Factory::getApplication();
+        FFToolsHelper::redirect($this->params);
+        FFToolsHelper::mootoolsRemove($this->params);
+    }
 
-        if (!$remove) {
+    public function onBeforeCompileHead()
+    {
+        if (Factory::getApplication()->isClient('administrator')) {
             return;
         }
 
-        if ($remove === 'site' && !$app->isClient('site')) {
-            return;
+        if ($this->params->get('minify-js')) {
+            FFToolsHelper::minifyJS($this->params->get('js-exclude'));
         }
 
-        if ($remove === 'admin' && !$app->isClient('admin')) {
-            return;
+        if ($this->params->get('minify-css')) {
+            FFToolsHelper::minifyCSS($this->params->get('css-exclude'));
         }
-
-        $buffer = $app->getBody();
-        $buffer = preg_replace('/<script src=".*?\/media\/system\/js\/mootools.*?"><\/script>/', '', $buffer);
-        $app->setBody($buffer);
     }
 }
