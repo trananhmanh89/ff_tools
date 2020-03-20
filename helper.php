@@ -241,7 +241,6 @@ class FFToolsHelper {
         $exclude = array_map('trim', $exclude);
 
         $doc = Factory::getDocument();
-        $doc->addStyleSheet(Uri::root() . 'test.css');
         
         $styles = $doc->_styleSheets;
         $absUriPattern = '/^' . preg_quote(Uri::root(), '/') . '/';

@@ -17,18 +17,6 @@
     <config>
         <fields name="params">
             <fieldset name="basic">
-                <field type="spacer" name="remove-mootool-spacer" label="&lt;h3&gt;Mootools Removal&lt;/h3&gt;" />
-                <field
-                    name="remove-mootools"
-                    type="list"
-                    label="Remove Mootools on"
-                    description="Choose where to remove mootools"
-                    default="">
-                    <option value="">no where</option>
-                    <option value="site">on Site</option>
-                    <option value="admin">on Admin</option>
-                    <option value="both">Site and Admin</option>
-                </field>
                 <field type="spacer" name="redirection-spacer" label="&lt;h3&gt;Redirection (only Front End)&lt;/h3&gt;" />
                 <field
                     name="ssl"
@@ -85,6 +73,18 @@
                     rows="5" 
                     cols="5" 
                     filter="raw"/>
+                <field type="spacer" name="remove-mootool-spacer" label="&lt;h3&gt;Mootools Removal&lt;/h3&gt;" />
+                <field
+                    name="remove-mootools"
+                    type="list"
+                    label="Remove Mootools on"
+                    description="Choose where to remove mootools"
+                    default="">
+                    <option value="">no where</option>
+                    <option value="site">on Site</option>
+                    <option value="admin">on Admin</option>
+                    <option value="both">Site and Admin</option>
+                </field>
             </fieldset>
         </fields>
     </config>
