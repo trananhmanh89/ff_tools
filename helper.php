@@ -129,7 +129,7 @@ class FFToolsHelper {
                     $content = is_file(JPATH_ROOT . $path) ? file_get_contents(JPATH_ROOT . $path) : '';
                     $minifier = new MatthiasMullie\Minify\JS($content);
                     $cache .= $minifier->minify();
-                    $cache .= "\n;\n";
+                    $cache .= ";\n";
                 }
                 
                 if (File::write($cachePath, $cache)) {
