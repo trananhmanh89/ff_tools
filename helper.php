@@ -1,11 +1,11 @@
 <?php
 defined('_JEXEC') or die('Restricted access');
 
+require __DIR__ . '/vendor/autoload.php';
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Uri\Uri;
-
-require __DIR__ . '/vendor/autoload.php';
 
 class FFToolsHelper {
     public static function redirect($params)
