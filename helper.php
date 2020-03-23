@@ -121,17 +121,17 @@ class FFToolsHelper {
                     continue;
                 }
 
-                $content = '';
+                $cache = '';
                 foreach ($value as $file) {
                     $path = preg_replace('/\?.*$/', '', $file);
                     $path = preg_replace($absUriPattern, Uri::root(true) . '/', $path);
                     $path = preg_replace($relUriPattern, '', $path);
-                    $content .= is_file(JPATH_ROOT . $path) ? file_get_contents(JPATH_ROOT . $path) : '';
-                    $content .= "\n";
+                    $content = is_file(JPATH_ROOT . $path) ? file_get_contents(JPATH_ROOT . $path) : '';
+                    $minifier = new MatthiasMullie\Minify\JS($content);
+                    $cache .= $minifier->minify();
+                    $cache .= "\n;\n";
                 }
                 
-                $minifier = new MatthiasMullie\Minify\JS($content);
-                $cache = $minifier->minify();
                 if (File::write($cachePath, $cache)) {
                     $doc->addScript($cacheUrl);
                 }
@@ -217,17 +217,17 @@ class FFToolsHelper {
                     continue;
                 }
 
-                $content = '';
+                $cache = '';
                 foreach ($value as $file) {
                     $path = preg_replace('/\?.*$/', '', $file);
                     $path = preg_replace($absUriPattern, Uri::root(true) . '/', $path);
                     $path = preg_replace($relUriPattern, '', $path);
-                    $content .= is_file(JPATH_ROOT . $path) ? file_get_contents(JPATH_ROOT . $path) : '';
-                    $content .= "\n";
+                    $content = is_file(JPATH_ROOT . $path) ? file_get_contents(JPATH_ROOT . $path) : '';
+                    $minifier = new MatthiasMullie\Minify\CSS($content);
+                    $cache .= $minifier->minify();
+                    $cache .= "\n\n";
                 }
-                
-                $minifier = new MatthiasMullie\Minify\CSS($content);
-                $cache = $minifier->minify();
+
                 if (File::write($cachePath, $cache)) {
                     $doc->addStyleSheet($cacheUrl);
                 }
