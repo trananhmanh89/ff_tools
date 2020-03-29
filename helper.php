@@ -224,15 +224,47 @@ class FFToolsHelper {
                     $path = preg_replace($relUriPattern, '', $path);
                     $content = is_file(JPATH_ROOT . $path) ? file_get_contents(JPATH_ROOT . $path) : '';
                     $minifier = new MatthiasMullie\Minify\CSS($content);
-                    $cache .= $minifier->minify();
+                    $output = $minifier->minify();
+                    $cache .= self::correctCssPath(JPATH_ROOT . $path, $output);
                     $cache .= "\n\n";
                 }
-
+  
                 if (File::write($cachePath, $cache)) {
                     $doc->addStyleSheet($cacheUrl);
                 }
             }
         }
+    }
+
+    protected static function correctCssPath($file, $str)
+    {
+        $file = realpath($file);
+        $info = pathinfo($file);
+        $basePath = $info['dirname'] . '/';
+
+        preg_match_all('/url\((.*?)\)/', $str, $matches);
+        if (isset($matches[1])) {
+            foreach ($matches[1] as $match) {
+                $url = trim($match, '"');
+                $url = trim($url, "'");
+
+                preg_match('/[\?|#].*?$/', $url, $tail);
+                $url = preg_replace('/[\?|#].*?$/', '', $url);
+
+                $path = realpath($basePath . $url);
+
+                if (!$path) {
+                    continue;
+                }
+
+                $relUrl = Uri::root(true) . str_replace(JPATH_ROOT, '', $path);
+                $relUrl = str_replace('\\', '/', $relUrl) . (isset($tail[0]) ? $tail[0] : '');
+                $relUrl = "'$relUrl'";
+                $str = str_replace($match, $relUrl, $str);
+            }
+        }
+
+        return $str;
     }
 
     protected static function getCssChunk($exclude)
