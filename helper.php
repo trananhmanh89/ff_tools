@@ -142,7 +142,11 @@ class FFToolsHelper {
     protected static function getJsChunk($exclude)
     {
         $exclude = explode("\n", $exclude);
+        $exclude = array_filter($exclude, function($value) {
+            return $value ? trim($value) : false;
+        });
         $exclude = array_map('trim', $exclude);
+        $exclude[] = 'media/editors/tinymce/tinymce.min.js';
 
         $doc = Factory::getDocument();
         $scripts = $doc->_scripts;
