@@ -260,7 +260,7 @@ class FFToolsHelper {
                 $relUrl = Uri::root(true) . str_replace(JPATH_ROOT, '', $path);
                 $relUrl = str_replace('\\', '/', $relUrl) . (isset($tail[0]) ? $tail[0] : '');
                 $relUrl = "'$relUrl'";
-                $str = str_replace($match, $relUrl, $str);
+                $str = str_replace('url(' . $match . ')', 'url(' . $relUrl . ')', $str);
             }
         }
 
