@@ -223,12 +223,18 @@ class FFToolsHelper {
                     $path = preg_replace($absUriPattern, Uri::root(true) . '/', $path);
                     $path = preg_replace($relUriPattern, '', $path);
                     $content = is_file(JPATH_ROOT . $path) ? file_get_contents(JPATH_ROOT . $path) : '';
-                    $minifier = new MatthiasMullie\Minify\CSS($content);
-                    $output = $minifier->minify();
-                    $cache .= self::correctCssPath(JPATH_ROOT . $path, $output);
-                    $cache .= "\n\n";
+
+                    $output = self::_minifyCss($content);
+                    $output = self::correctCssUrlPath(JPATH_ROOT . $path, $output);
+                    $output = self::currectCssImportPath(JPATH_ROOT . $path, $output);
+                    
+                    $cache .= "/* $file */ ";
+                    $cache .= $output;
+                    $cache .= "\n";
                 }
-  
+
+                $cache = self::moveCssImportToTop($cache);
+
                 if (File::write($cachePath, $cache)) {
                     $doc->addStyleSheet($cacheUrl);
                 }
@@ -236,7 +242,69 @@ class FFToolsHelper {
         }
     }
 
-    protected static function correctCssPath($file, $str)
+    protected static function _minifyCss($css)
+    {
+        $css = preg_replace( '~\s+~', ' ', $css );
+		$css = preg_replace( '~/\*.*?\*/~s', '', $css );
+		$css = str_replace( '; ', ';', $css );
+		$css = str_replace( ': ', ':', $css );
+		$css = str_replace( ' {', '{', $css );
+		$css = str_replace( '{ ', '{', $css );
+		$css = str_replace( ', ', ',', $css );
+		$css = str_replace( '} ', '}', $css );
+		$css = str_replace( ';}', '}', $css );
+
+		return trim( $css );
+    }
+
+    protected static function moveCssImportToTop($str)
+    {
+        $import = '';
+
+        preg_match_all('/@import .*?;/', $str, $matches);
+        if (!empty($matches[0])) {
+
+            foreach ($matches[0] as $match) {
+                $str = str_replace($match, '', $str);
+                $import .= "$match\n";
+            }
+        }
+
+        return $import . $str;
+    }
+
+    protected static function currectCssImportPath($file, $str)
+    {
+        $file = realpath($file);
+        $info = pathinfo($file);
+        $basePath = $info['dirname'] . '/';
+
+        preg_match_all('/@import ([\'|"].*?[\'|"]).*?;/', $str, $matches);
+        if (!empty($matches[1])) {
+            foreach ($matches[1] as $match) {
+                $url = trim($match, '"');
+                $url = trim($url, "'");
+
+                preg_match('/[\?|#].*?$/', $url, $tail);
+                $url = preg_replace('/[\?|#].*?$/', '', $url);
+
+                $path = realpath($basePath . $url);
+
+                if (!$path) {
+                    continue;
+                }
+
+                $relUrl = Uri::root(true) . str_replace(JPATH_ROOT, '', $path);
+                $relUrl = str_replace('\\', '/', $relUrl) . (isset($tail[0]) ? $tail[0] : '');
+                $relUrl = "'$relUrl'";
+                $str = str_replace('@import ' . $match, '@import ' . $relUrl, $str);
+            }
+        }
+
+        return $str;
+    }
+
+    protected static function correctCssUrlPath($file, $str)
     {
         $file = realpath($file);
         $info = pathinfo($file);
