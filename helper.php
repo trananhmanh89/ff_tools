@@ -230,7 +230,7 @@ class FFToolsHelper {
 
                     $output = self::_minifyCss($content);
                     $output = self::correctCssUrlPath(JPATH_ROOT . $path, $output);
-                    $output = self::currectCssImportPath(JPATH_ROOT . $path, $output);
+                    $output = self::correctCssImportPath(JPATH_ROOT . $path, $output);
                     
                     $cache .= "/* $file */ ";
                     $cache .= $output;
@@ -277,7 +277,7 @@ class FFToolsHelper {
         return $import . $str;
     }
 
-    protected static function currectCssImportPath($file, $str)
+    protected static function correctCssImportPath($file, $str)
     {
         $file = realpath($file);
         $info = pathinfo($file);
