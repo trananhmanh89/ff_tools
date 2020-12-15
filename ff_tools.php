@@ -29,18 +29,24 @@ class PlgSystemFf_tools extends CMSPlugin
             FFToolsHelper::minifyCSS($this->params->get('css-exclude'));
         }
 
-        $doc = Factory::getDocument();
-        $this->_scripts = $doc->_scripts;
-        $this->_script = $doc->_script;
+        if ($this->params->get('script-to-bottom')) {
+            $doc = Factory::getDocument();
+            $this->_scripts = $doc->_scripts;
+            $this->_script = $doc->_script;
 
-        $doc->_scripts = [];
-        $doc->_script = [];
+            $doc->_scripts = [];
+            $doc->_script = [];
+        }
     }
 
     public function onAfterRender()
     {
         $app = Factory::getApplication();
         if ($app->isClient('administrator')) {
+            return;
+        }
+
+        if (!$this->params->get('script-to-bottom')) {
             return;
         }
 

@@ -73,6 +73,14 @@
                     rows="5" 
                     cols="5" 
                     filter="raw"/>
+                <field
+                    name="script-to-bottom"
+                    type="list"
+                    label="Script To Bottom"
+                    default="">
+                    <option value="">No</option>
+                    <option value="1">Yes</option>
+                </field>
                 <field type="spacer" name="remove-mootool-spacer" label="&lt;h3&gt;Mootools Removal&lt;/h3&gt;" />
                 <field
                     name="remove-mootools"
