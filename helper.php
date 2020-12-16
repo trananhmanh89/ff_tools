@@ -115,7 +115,7 @@ class FFToolsHelper {
             if (is_array($value)) {
                 $hash = md5(implode('', $value));
                 $cachePath = JPATH_ROOT . '/cache/ff_tools_js_cache/cache-' . $hash . '.js';
-                $cacheUrl = Uri::root(true) . '/cache/ff_tools_js_cache/cache-' . $hash . '.js';
+                $cacheUrl = Uri::root(true) . '/cache/ff_tools_js_cache/cache-' . $hash . '.js?' . md5(date('Y-m-d'));
                 if (is_file($cachePath)) {
                     $doc->addScript($cacheUrl);
                     continue;
@@ -215,7 +215,7 @@ class FFToolsHelper {
             if (is_array($value)) {
                 $hash = md5(implode('', $value));
                 $cachePath = JPATH_ROOT . '/cache/ff_tools_css_cache/cache-' . $hash . '.css';
-                $cacheUrl = Uri::root(true) . '/cache/ff_tools_css_cache/cache-' . $hash . '.css';
+                $cacheUrl = Uri::root(true) . '/cache/ff_tools_css_cache/cache-' . $hash . '.css?' . md5(date('Y-m-d'));
                 if (is_file($cachePath)) {
                     $doc->addStyleSheet($cacheUrl);
                     continue;
