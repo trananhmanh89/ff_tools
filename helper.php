@@ -510,8 +510,8 @@ class FFToolsHelper
             $frags = explode('?', $value);
             $file = JPATH_ROOT . $frags[0];
             $content = "<style>\n" . file_get_contents($file) . "</style>";
-            $search = '<link href="'.$value.'" rel="stylesheet" />';
-            $body = str_replace($search, $content, $body);
+            $search = '/<link href="'.preg_quote($value, '/').'.*?\/>/';
+            $body = preg_replace($search, $content, $body);
         }
 
         $app->setBody($body);
