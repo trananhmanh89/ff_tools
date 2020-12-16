@@ -64,6 +64,15 @@
                     <option value="">No</option>
                     <option value="1">Yes</option>
                 </field>
+                <field
+                    name="inline-css"
+                    type="list"
+                    label="Inline Css"
+                    default=""
+                    showon="minify-css:1">
+                    <option value="">No</option>
+                    <option value="1">Yes</option>
+                </field>
                 <field 
                     name="css-exclude" 
                     type="textarea" 
