@@ -13,58 +13,43 @@ class FFToolsHelper
     {
         $app = Factory::getApplication();
 
-        if ($app->isAdmin()) {
+        if ($app->isClient('administrator')) {
             return;
         }
 
-        $currentUrl = (string) Uri::getInstance();
-
-        $scheme = self::getScheme($params);
-        $host = self::getHost($params);
-
-        $targetUrl = $scheme . '://' . $host . $_SERVER['REQUEST_URI'];
-
-        if ($currentUrl !== $targetUrl) {
-            header("HTTP/1.1 301 Moved Permanently");
-            header('Location: ' . $targetUrl);
-            exit();
-        }
-    }
-
-    protected static function getHost($params)
-    {
-        $localhost = array('127.0.0.1', '::1', 'localhost');
-        if (in_array($_SERVER['SERVER_NAME'], $localhost)) {
-            return $_SERVER['SERVER_NAME'];
-        }
-
-        $wwwRedirect = $params->get('www');
-        if (!$wwwRedirect) {
-            return $_SERVER['SERVER_NAME'];
-        }
-
-        if ($wwwRedirect === 'none-www') {
-            return preg_replace('/^(www\.)(\w+\.\w+)$/', '$2', $_SERVER['SERVER_NAME']);
-        }
-
-        $isWWW = preg_match('/^(www\.)(\w+\.\w+)$/', $_SERVER['SERVER_NAME']);
-        if ($wwwRedirect === 'www' && !$isWWW) {
-            return 'www.' . $_SERVER['SERVER_NAME'];
-        }
-
-        return $_SERVER['SERVER_NAME'];
-    }
-
-    protected static function getScheme($params)
-    {
+        $uri = Uri::getInstance();
+        $currentSchema = $uri->getScheme();
+        $currentHost = $uri->getHost();
         $config = Factory::getConfig();
 
-        if ($config->get('force_ssl') === '2') {
-            return 'https';
+        if ($config->get('force_ssl') === '2' || $params->get('ssl') === 'https') {
+            $uri->setScheme('https');
+        } else {
+            $uri->setScheme('http');
         }
 
-        $sslRedirect = $params->get('ssl');
-        return $sslRedirect ? $sslRedirect : (isset($_SERVER['HTTPS']) ? 'https' : 'http');
+        $localhost = array('127.0.0.1', '::1', 'localhost');
+        $host = $currentHost;
+        if (!in_array($currentHost, $localhost)) {
+            $wwwRedirect = $params->get('www');
+
+            if ($wwwRedirect === 'none-www') {
+                $host = preg_replace('/^(www\.)(\w+\.\w+)$/', '$2', $currentHost);
+            }
+
+            $isWWW = preg_match('/^(www\.)(\w+\.\w+)$/', $currentHost);
+            if ($wwwRedirect === 'www' && !$isWWW) {
+                $host = 'www.' . $_SERVER['SERVER_NAME'];
+            }
+        }
+
+        $uri->setHost($host);
+
+        if ($currentHost !== $uri->getHost() || $currentSchema !== $uri->getScheme()) {
+            header("HTTP/1.1 301 Moved Permanently");
+            header('Location: ' . $uri->toString());
+            exit();
+        }
     }
 
     public static function mootoolsRemove($params)
@@ -510,7 +495,7 @@ class FFToolsHelper
             $frags = explode('?', $value);
             $file = JPATH_ROOT . $frags[0];
             $content = "<style>\n" . file_get_contents($file) . "</style>";
-            $search = '/<link href="'.preg_quote($value, '/').'.*?\/>/';
+            $search = '/<link href="' . preg_quote($value, '/') . '.*?\/>/';
             $body = preg_replace($search, $content, $body);
         }
 
